@@ -11,19 +11,18 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws InvalidProtocolBufferException {
 		ByteBuf buf = (ByteBuf) msg;
-		buf.readByte();
+		buf.readInt();
 
 		byte[] data = new byte[buf.readableBytes()];
 		buf.readBytes(data);
 
-		System.out.println(new String(data) + " : " + System.nanoTime());
+		// System.out.println(new String(data) + " : " + System.nanoTime());
 
-		// RpcMessage.RpcRequest request = RpcMessage.RpcRequest.parseFrom(new
-		// byte[buf.readableBytes()]);
-		//
-		// System.out.println("rpc_id -> " + request.getHeader().getRpcId());
-		// System.out.println("req_id -> " + request.getHeader().getReqId());
-		// System.out.println("content -> " + request.getContent().toString());
+		RpcMessage.RpcRequest request = RpcMessage.RpcRequest.parseFrom(data);
+
+		System.out.println("rpc_id -> " + request.getHeader().getRpcId());
+		System.out.println("req_id -> " + request.getHeader().getReqId());
+		System.out.println("content -> " + new String(request.getContent().toByteArray()));
 	}
 
 	@Override

@@ -1,9 +1,11 @@
 package com.cpcb.gs;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Random;
 
 import org.junit.Test;
 
@@ -17,19 +19,20 @@ public class ClientTest {
 		String msg = "Hello GameSerer!";
 
 		Socket socket = new Socket("127.0.0.1", 8080);
-
-		OutputStream out = socket.getOutputStream();
-
-		RequestHeader header = RequestHeader.newBuilder().setRpcId(123456).setReqId(5201314).build();
-		RpcMessage.RpcRequest request = RpcMessage.RpcRequest.newBuilder().setHeader(header)
-				.setContent(ByteString.copyFrom(msg.getBytes())).build();
+		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
 		long start = System.currentTimeMillis();
 		for (int i = 0; i < 102400; i++) {
-			int len = msg.getBytes().length;
-			out.write(len);
-			// System.out.println("msg len = " + len);
-			out.write(msg.getBytes());
+			RequestHeader header = RequestHeader.newBuilder().setRpcId(new Random().nextInt())
+					.setReqId(new Random().nextInt()).build();
+			RpcMessage.RpcRequest request = RpcMessage.RpcRequest.newBuilder().setHeader(header)
+					.setContent(
+							ByteString.copyFrom(("Hello GameServer!Hello GameServer!Hello GameServer!" + i).getBytes()))
+					.build();
+
+			byte[] bytes = request.toByteArray();
+			out.writeInt(bytes.length);
+			out.write(bytes);
 			out.flush();
 		}
 		long end = System.currentTimeMillis();

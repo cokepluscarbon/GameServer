@@ -7,7 +7,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 public class GameServerHanlder implements ChannelHandler {
 
 	public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-		ctx.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024, 0, 1));
+		ctx.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024, 0, 4));
 		ctx.pipeline().addLast(new GameServerAdapter());
 	}
 
