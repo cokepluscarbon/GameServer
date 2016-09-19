@@ -39,4 +39,8 @@ public class ProtocolDeploy extends BaseDeploy {
 			return "InnerObject [id=" + id + ", name=" + name + "]";
 		}
 	}
+
+	public static ProtocolDeploy getDeploy(int key) {
+		return (ProtocolDeploy) TableLoader.Load("protocol", ProtocolDeploy.class).get(key);
+	}
 }
