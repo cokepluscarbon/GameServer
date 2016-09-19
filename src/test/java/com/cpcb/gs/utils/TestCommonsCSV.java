@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.cpcb.gs.Rpc;
 import com.cpcb.gs.io.ProtocolDeploy;
 
 public class TestCommonsCSV {
@@ -72,5 +73,15 @@ public class TestCommonsCSV {
 		long end = System.currentTimeMillis();
 		System.err.println("Spend Time : " + (end - start));
 		System.err.println("Per Spend Time : " + (end - start) * 1f / 500f);
+	}
+
+	@Test
+	public void test_anno() {
+		ProtocolDeploy.getDeploy(1);
+	}
+
+	@Rpc("rpc_get_mission")
+	public void test_rpc() {
+
 	}
 }
