@@ -1,7 +1,12 @@
 package com.cpcb.gs;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
 
+import org.springframework.beans.BeansException;
+
+import com.cpcb.gs.io.ProtocolDeploy;
+import com.cpcb.gs.rpc.RpcHandlerMapping;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Method;
 
@@ -29,8 +34,22 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 		System.out.println("rpc_id -> " + request.getHeader().getRpcId());
 		System.out.println("req_id -> " + request.getHeader().getReqId());
 		System.out.println("content -> " + new String(request.getContent().toByteArray()));
-		
-		Method method = null;
+
+		int rpcId = request.getHeader().getRpcId();
+		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class);
+
+		RpcHandlerMapping rpcHandler = ServerContext.rpcHandlerMap.get(deploy.rpc);
+		try {
+			rpcHandler.method.invoke(ServerContext.ctx.getBean(rpcHandler.clazz), buf);
+		} catch (BeansException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

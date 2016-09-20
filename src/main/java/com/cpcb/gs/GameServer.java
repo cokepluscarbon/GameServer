@@ -10,6 +10,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 public class GameServer {
 
 	public static void main(String[] args) throws Exception {
+		new ServerContext().start();
 		new GameServer().run();
 	}
 
