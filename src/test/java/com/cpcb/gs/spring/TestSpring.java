@@ -12,8 +12,6 @@ public class TestSpring {
 
 	@Test
 	public void test_01() {
-		// ApplicationContext context = new ClassPathXmlApplicationContext(new
-		// String[] { "services.xml", "daos.xml" });
 		ApplicationContext ctx = new FileSystemXmlApplicationContext("config/spring/spring-context.xml");
 
 		System.out.println("Bean Count : " + ctx.getBeanDefinitionCount());
@@ -21,7 +19,8 @@ public class TestSpring {
 
 		RpcHandler rpcHandler = ctx.getBean(RpcHandler.class);
 
-		Integer i = this.getBean(Integer.class);
+		rpcHandler.addRpcMethod("rpc_set_player", TestSpring.class.getMethods()[0]);
+		rpcHandler.addRpcMethod("rpc_get_player", TestSpring.class.getMethods()[1]);
 	}
 
 	public <T> T getBean(Class<T> requiredType) {
