@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.cpcb.gs.Rpc;
+import com.cpcb.gs.annotation.Rpc;
+import com.cpcb.gs.io.BaseDeploy;
 import com.cpcb.gs.io.ProtocolDeploy;
 
 public class TestCommonsCSV {
@@ -13,7 +14,7 @@ public class TestCommonsCSV {
 	public void test_tableLoader() throws IOException {
 		long start = System.currentTimeMillis();
 
-		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(101);
+		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(101, ProtocolDeploy.class);
 		System.out.println(deploy);
 		long end = System.currentTimeMillis();
 		System.err.println("Spend Time : " + (end - start));
@@ -24,7 +25,7 @@ public class TestCommonsCSV {
 	public void test_tableLoader2() throws IOException {
 		long start = System.currentTimeMillis();
 
-		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(1);
+		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(1, ProtocolDeploy.class);
 		System.out.println(deploy);
 		long end = System.currentTimeMillis();
 		System.err.println("Spend Time : " + (end - start));
@@ -35,7 +36,7 @@ public class TestCommonsCSV {
 	public void test_tableLoader3() throws IOException {
 		long start = System.currentTimeMillis();
 
-		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(11);
+		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(11, ProtocolDeploy.class);
 		System.out.println(deploy);
 		long end = System.currentTimeMillis();
 		System.err.println("Spend Time : " + (end - start));
@@ -46,7 +47,7 @@ public class TestCommonsCSV {
 	public void test_tableLoader4() throws IOException {
 		long start = System.currentTimeMillis();
 
-		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(100);
+		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(100, ProtocolDeploy.class);
 		System.out.println(deploy);
 		long end = System.currentTimeMillis();
 		System.err.println("Spend Time : " + (end - start));
@@ -57,7 +58,7 @@ public class TestCommonsCSV {
 	public void test_tableLoader5() throws IOException {
 		long start = System.currentTimeMillis();
 
-		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(201);
+		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(201, ProtocolDeploy.class);
 		System.out.println(deploy);
 		long end = System.currentTimeMillis();
 		System.err.println("Spend Time : " + (end - start));
@@ -68,7 +69,7 @@ public class TestCommonsCSV {
 	public void test_tableLoader6() throws IOException {
 		long start = System.currentTimeMillis();
 
-		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(401);
+		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(401, ProtocolDeploy.class);
 		System.out.println(deploy);
 		long end = System.currentTimeMillis();
 		System.err.println("Spend Time : " + (end - start));
@@ -77,7 +78,7 @@ public class TestCommonsCSV {
 
 	@Test
 	public void test_anno() {
-		ProtocolDeploy.getDeploy(1);
+		ProtocolDeploy.getDeploy(1, ProtocolDeploy.class);
 	}
 
 	@Rpc("rpc_get_mission")

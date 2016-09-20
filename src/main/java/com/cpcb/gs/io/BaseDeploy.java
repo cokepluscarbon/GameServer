@@ -1,6 +1,6 @@
 package com.cpcb.gs.io;
 
-import com.cpcb.gs.Rpc;
+import com.cpcb.gs.annotation.Deploy;
 
 public class BaseDeploy {
 	public int id;
@@ -13,10 +13,8 @@ public class BaseDeploy {
 		this.id = id;
 	}
 
-	public void GetDeploy() {
-		Class clazz = this.getClass();
-		Rpc annotation = (Rpc) clazz.getAnnotation(Rpc.class);
-
-		System.out.println(annotation.value());
+	public static <T extends BaseDeploy> T getDeploy(int key, Class<T> classType) {
+		Deploy deploy = classType.getAnnotation(Deploy.class);
+		return (T) TableLoader.Load(deploy.value(), classType).get(key);
 	}
 }

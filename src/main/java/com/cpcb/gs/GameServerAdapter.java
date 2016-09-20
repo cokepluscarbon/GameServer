@@ -14,7 +14,7 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws InvalidProtocolBufferException {
 		InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
 		System.out.println(socketAddress.getAddress().getHostAddress() + ":" + socketAddress.getPort());
-		
+
 		ByteBuf buf = (ByteBuf) msg;
 		buf.readInt();
 

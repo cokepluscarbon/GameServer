@@ -3,7 +3,9 @@ package com.cpcb.gs.io;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cpcb.gs.annotation.Deploy;
 
+@Deploy("protocol")
 public class ProtocolDeploy extends BaseDeploy {
 	public String rpc;
 	public boolean encrypt;
@@ -40,7 +42,8 @@ public class ProtocolDeploy extends BaseDeploy {
 		}
 	}
 
-	public static ProtocolDeploy getDeploy(int key) {
-		return (ProtocolDeploy) TableLoader.Load("protocol", ProtocolDeploy.class).get(key);
-	}
+	// public static ProtocolDeploy getDeploy(int key) {
+	// return (ProtocolDeploy) TableLoader.Load("protocol",
+	// ProtocolDeploy.class).get(key);
+	// }
 }
