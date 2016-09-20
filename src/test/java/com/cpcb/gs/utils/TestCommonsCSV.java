@@ -78,7 +78,8 @@ public class TestCommonsCSV {
 
 	@Test
 	public void test_anno() {
-		ProtocolDeploy.getDeploy(1, ProtocolDeploy.class);
+		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(1, ProtocolDeploy.class);
+		System.out.println(deploy.toString());
 	}
 
 	@Rpc("rpc_get_mission")

@@ -15,6 +15,6 @@ public class BaseDeploy {
 
 	public static <T extends BaseDeploy> T getDeploy(int key, Class<T> classType) {
 		Deploy deploy = classType.getAnnotation(Deploy.class);
-		return (T) TableLoader.Load(deploy.value(), classType).get(key);
+		return TableLoader.Load(deploy.value(), classType).get(key);
 	}
 }

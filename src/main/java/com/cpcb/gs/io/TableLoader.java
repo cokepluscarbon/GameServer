@@ -19,17 +19,18 @@ import com.cpcb.gs.io.ProtocolDeploy.TestEnum;
 public class TableLoader {
 	private static Map<String, Map<Integer, ? extends BaseDeploy>> cacheMap = new HashMap<String, Map<Integer, ? extends BaseDeploy>>(); // 配置表缓存
 
-	public static Map<Integer, ?> Load(String path, Class<? extends BaseDeploy> clazz) {
+	@SuppressWarnings("unchecked")
+	public static <T extends BaseDeploy> Map<Integer, T> Load(String path, Class<T> clazz) {
 		if (cacheMap.containsKey(path)) {
-			return cacheMap.get(path);
+			return (Map<Integer, T>) cacheMap.get(path);
 		}
 
 		Iterable<CSVRecord> records = getCSVRecords(path);
 		if (records != null) {
 			try {
-				Map<Integer, BaseDeploy> deployMap = new HashMap<Integer, BaseDeploy>();
+				Map<Integer, T> deployMap = new HashMap<Integer, T>();
 				for (CSVRecord record : records) {
-					BaseDeploy deploy = ResolveRecord(record, clazz);
+					T deploy = ResolveRecord(record, clazz);
 					deployMap.put(deploy.id, deploy);
 				}
 				cacheMap.put(path, deployMap);
@@ -42,9 +43,9 @@ public class TableLoader {
 		return null;
 	}
 
-	private static BaseDeploy ResolveRecord(CSVRecord record, Class<? extends BaseDeploy> clazz)
+	private static <T extends BaseDeploy> T ResolveRecord(CSVRecord record, Class<T> clazz)
 			throws InstantiationException, IllegalAccessException {
-		BaseDeploy deploy = clazz.newInstance();
+		T deploy = clazz.newInstance();
 		deploy.setId(Integer.parseInt(record.get("id")));
 
 		for (Field field : clazz.getDeclaredFields()) {
@@ -78,6 +79,7 @@ public class TableLoader {
 				field.set(deploy, JSON.parseObject(fieldValue, fieldClass));
 			}
 		}
+
 		return deploy;
 	}
 
