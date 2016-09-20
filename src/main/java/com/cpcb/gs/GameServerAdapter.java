@@ -3,6 +3,7 @@ package com.cpcb.gs;
 import java.net.InetSocketAddress;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Method;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,6 +29,8 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 		System.out.println("rpc_id -> " + request.getHeader().getRpcId());
 		System.out.println("req_id -> " + request.getHeader().getReqId());
 		System.out.println("content -> " + new String(request.getContent().toByteArray()));
+		
+		Method method = null;
 	}
 
 	@Override
