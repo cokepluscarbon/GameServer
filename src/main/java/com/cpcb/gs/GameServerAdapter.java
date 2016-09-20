@@ -2,6 +2,7 @@ package com.cpcb.gs;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
+import java.util.Random;
 
 import org.springframework.beans.BeansException;
 
@@ -40,7 +41,8 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 
 		RpcHandlerMapping rpcHandler = ServerContext.rpcHandlerMap.get(deploy.rpc);
 		try {
-			rpcHandler.method.invoke(ServerContext.ctx.getBean(rpcHandler.clazz), buf);
+			Object[] args = new Object[] { buf, new Random().nextInt() };
+			rpcHandler.method.invoke(ServerContext.ctx.getBean(rpcHandler.clazz), args);
 		} catch (BeansException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

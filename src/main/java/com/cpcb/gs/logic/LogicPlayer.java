@@ -17,8 +17,8 @@ import io.netty.buffer.ByteBuf;
 public class LogicPlayer {
 
 	@Rpc("rpc_get_player")
-	public void getPlayer(ByteBuf buf) {
-		System.err.println(String.format("call rpc_get_player"));
+	public void getPlayer(ByteBuf buf, long pid) {
+		System.err.println(String.format("call rpc_get_player [pid=%s]", pid));
 	}
 
 }
