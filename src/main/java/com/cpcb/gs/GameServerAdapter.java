@@ -1,5 +1,7 @@
 package com.cpcb.gs;
 
+import java.net.InetSocketAddress;
+
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import io.netty.buffer.ByteBuf;
@@ -10,6 +12,9 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws InvalidProtocolBufferException {
+		InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
+		System.out.println(socketAddress.getAddress().getHostAddress() + ":" + socketAddress.getPort());
+		
 		ByteBuf buf = (ByteBuf) msg;
 		buf.readInt();
 
