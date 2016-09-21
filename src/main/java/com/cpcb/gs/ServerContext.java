@@ -35,12 +35,11 @@ public class ServerContext {
 			for (Method method : clazz.getDeclaredMethods()) {
 				Rpc rpc = method.getDeclaredAnnotation(Rpc.class);
 				if (rpc != null) {
-					rpcHandlerMap.put(rpc.value(), new RpcHandlerMapping(LogicPlayer.class, method));
+					rpcHandlerMap.put(rpc.value(), new RpcHandlerMapping(clazz, method));
 				}
 			}
-
-			logger.info("RpcHandlerMap size is {}", rpcHandlerMap.size());
 		}
+		logger.info("RpcHandlerMap size is {}", rpcHandlerMap.size());
 	}
 
 	private List<Class<?>> scanLogics() {

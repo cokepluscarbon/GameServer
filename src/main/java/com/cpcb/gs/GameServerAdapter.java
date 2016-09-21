@@ -57,7 +57,11 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 			RpcWriter rpcWriter = new RpcWriter();
 
 			for (Class<?> pType : parameterTypes) {
-				if (pType.equals(RpcReader.class)) {
+				if (pType.equals(int.class)) {
+					args[index] = rpcReader.readInt();
+				} else if (pType.equals(String.class)) {
+					args[index] = rpcReader.readString();
+				} else if (pType.equals(RpcReader.class)) {
 					args[index] = rpcReader;
 				} else if (pType.equals(RpcWriter.class)) {
 					args[index] = rpcWriter;
@@ -67,7 +71,17 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 
 				index++;
 			}
-			rpcHandler.method.invoke(ServerContext.ctx.getBean(rpcHandler.clazz), args);
+
+			Object returnObj = rpcHandler.method.invoke(ServerContext.ctx.getBean(rpcHandler.clazz), args);
+
+			Class<?> returnType = rpcHandler.method.getReturnType();
+			if (returnType.equals(int.class)) {
+				rpcWriter.WriteInt((Integer) returnObj);
+			} else if (returnType.equals(void.class)) {
+
+			} else {
+				rpcWriter.WriteObject(returnObj);
+			}
 
 			// Write Back
 			ResponseHeader header = RpcMessage.RpcResponse.ResponseHeader.newBuilder()
@@ -76,7 +90,7 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 					.setContent(ByteString.copyFrom(rpcWriter.getBytes())).build();
 
 			byte[] backBytes = response.toByteArray();
-			
+
 			ByteBuf backBuf = ctx.alloc().buffer(backBytes.length);
 			backBuf.writeInt(backBytes.length);
 			backBuf.writeBytes(backBytes);

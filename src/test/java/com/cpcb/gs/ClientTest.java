@@ -29,8 +29,6 @@ public class ClientTest {
 				try {
 					while (true) {
 						int len = in.readInt();
-						System.out.println("Client len -> " + len);
-
 						byte[] bytes = new byte[len];
 						in.read(bytes);
 
@@ -39,7 +37,7 @@ public class ClientTest {
 
 						RpcReader reader = new RpcReader(content);
 						System.out.println(reader.readString());
-						
+
 					}
 				} catch (Exception e) {
 
@@ -49,12 +47,13 @@ public class ClientTest {
 
 		int count = 0;
 		while (true) {
-			RpcWriter writer = new RpcWriter();
-			writer.WriteString("Hello GameServer : " + count++);
-			writer.WriteString("----------------- zengguotai");
-			writer.WriteInt(10086);
+			int rpcId = new Random().nextInt(4) + 1;
 
-			RequestHeader header = RequestHeader.newBuilder().setRpcId(1).setReqId(new Random().nextInt()).build();
+			RpcWriter writer = new RpcWriter();
+			writer.WriteInt(rpcId);
+			writer.WriteString("Hello GameServer : " + count++);
+
+			RequestHeader header = RequestHeader.newBuilder().setRpcId(rpcId).setReqId(rpcId).build();
 			RpcMessage.RpcRequest request = RpcMessage.RpcRequest.newBuilder().setHeader(header)
 					.setContent(ByteString.copyFrom(writer.getBytes())).build();
 
@@ -62,7 +61,7 @@ public class ClientTest {
 			out.writeInt(bytes.length);
 			out.write(bytes);
 			out.flush();
-			Thread.sleep(50);
+			Thread.sleep(500);
 		}
 	}
 
@@ -74,8 +73,6 @@ public class ClientTest {
 		for (int i = 0; i < 3; i++) {
 			RpcWriter writer = new RpcWriter();
 			writer.WriteString("Hello GameServer : " + i);
-			writer.WriteString("----------------- zengguotai");
-			writer.WriteInt(10086);
 
 			RequestHeader header = RequestHeader.newBuilder().setRpcId(1).setReqId(new Random().nextInt()).build();
 			RpcMessage.RpcRequest request = RpcMessage.RpcRequest.newBuilder().setHeader(header)

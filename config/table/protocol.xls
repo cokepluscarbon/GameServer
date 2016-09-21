@@ -2,8 +2,8 @@
 #id	协议名称	是否加密	测试用									
 id	rpc	encrypt	tests	tests2	tests3	jsonObject	object	testDouble	testFloat	testByte	testLong	testEnum
 1	rpc_get_player	1	[1,2,3]	["tiger","tiger2"]	[false]	{"id":1}	{"name":"tiger"}	1	2	1	4	A
-2	rpc_user_login	1	[4,5,6]	["test"]	[true,true]	{"id":2}	{"id":1}	2	3	1	5	B
-3	rpc_user_login	1	[1,2,4]	["tiger","tiger3"]	[false]	{"id":3}	{"name":"tiger"}	3	4	1	6	C
+2	rpc_get_hero	1	[4,5,6]	["test"]	[true,true]	{"id":2}	{"id":1}	2	3	1	5	B
+3	rpc_get_gun	1	[1,2,4]	["tiger","tiger3"]	[false]	{"id":3}	{"name":"tiger"}	3	4	1	6	C
 4	rpc_user_login	1	[4,5,7]	["test"]	[true,true]	{"id":4}	{"id":2}	4	5	1	7	D
 5	rpc_user_login	1	[1,2,5]	["tiger","tiger4"]	[false]	{"id":5}	{"name":"tiger"}	5	6	1	8	A
 6	rpc_user_login	1	[4,5,8]	["test"]	[true,true]	{"id":6}	{"id":3}	6	7	1	9	B
