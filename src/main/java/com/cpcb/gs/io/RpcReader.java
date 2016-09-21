@@ -55,7 +55,6 @@ public class RpcReader {
 
 	public String readString() {
 		int len = readInt();
-
 		byte[] bytes = new byte[len];
 		try {
 			input.read(bytes);

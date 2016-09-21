@@ -1,5 +1,6 @@
 package com.cpcb.gs;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,6 +11,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import com.cpcb.gs.RpcMessage.RpcRequest.RequestHeader;
+import com.cpcb.gs.io.RpcWriter;
 import com.google.protobuf.ByteString;
 
 public class ClientTest {
@@ -21,9 +23,12 @@ public class ClientTest {
 
 		long start = System.currentTimeMillis();
 		for (int i = 0; i < 10; i++) {
+			RpcWriter writer = new RpcWriter();
+			writer.WriteString("Hello GameServer : " + i);
+			
 			RequestHeader header = RequestHeader.newBuilder().setRpcId(1).setReqId(new Random().nextInt()).build();
 			RpcMessage.RpcRequest request = RpcMessage.RpcRequest.newBuilder().setHeader(header)
-					.setContent(ByteString.copyFrom(("Hello GameServer!" + i).getBytes())).build();
+					.setContent(ByteString.copyFrom(writer.getBytes())).build();
 
 			byte[] bytes = request.toByteArray();
 			out.writeInt(bytes.length);
