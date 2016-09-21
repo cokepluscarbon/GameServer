@@ -28,7 +28,8 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws InvalidProtocolBufferException {
 		InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
-		// System.out.println(socketAddress.getAddress().getHostAddress() + ":" + socketAddress.getPort());
+		// System.out.println(socketAddress.getAddress().getHostAddress() + ":"
+		// + socketAddress.getPort());
 
 		ByteBuf buf = (ByteBuf) msg;
 		buf.readInt();
@@ -38,10 +39,10 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 
 		RpcMessage.RpcRequest request = RpcMessage.RpcRequest.parseFrom(data);
 
-		invokeRpcMethod(buf, request);
+		invokeRpcMethod(ctx, buf, request);
 	}
 
-	private void invokeRpcMethod(ByteBuf buf, RpcMessage.RpcRequest request) {
+	private void invokeRpcMethod(ChannelHandlerContext ctx, ByteBuf buf, RpcMessage.RpcRequest request) {
 		int rpcId = request.getHeader().getRpcId();
 		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class);
 
@@ -69,14 +70,17 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 			rpcHandler.method.invoke(ServerContext.ctx.getBean(rpcHandler.clazz), args);
 
 			// Write Back
-//			ResponseHeader header = RpcMessage.RpcResponse.ResponseHeader.newBuilder()
-//					.setReqId(request.getHeader().getReqId()).build();
-//			RpcResponse response = RpcMessage.RpcResponse.newBuilder().setHeader(header)
-//					.setContent(ByteString.copyFrom(rpcWriter.getBytes())).build();
+			ResponseHeader header = RpcMessage.RpcResponse.ResponseHeader.newBuilder()
+					.setReqId(request.getHeader().getReqId()).build();
+			RpcResponse response = RpcMessage.RpcResponse.newBuilder().setHeader(header)
+					.setContent(ByteString.copyFrom(rpcWriter.getBytes())).build();
 
-			//byte[] backBytes = response.toByteArray();
-			//buf.writeInt(backBytes.length);
-			//buf.writeBytes(backBytes);
+			byte[] backBytes = response.toByteArray();
+			
+			ByteBuf backBuf = ctx.alloc().buffer(backBytes.length);
+			backBuf.writeInt(backBytes.length);
+			backBuf.writeBytes(backBytes);
+			ctx.writeAndFlush(backBuf);
 
 		} catch (BeansException e) {
 			e.printStackTrace();

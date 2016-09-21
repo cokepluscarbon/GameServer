@@ -16,9 +16,11 @@ public class LogicPlayer {
 	public void getPlayer(RpcWriter writer, RpcReader reader) {
 		System.err.println(String.format("call rpc_get_player [writer=%s,reader=%s]", writer, reader));
 
-		System.err.println(new String(reader.readString()));
-		
-		//writer.WriteString("RPC CALL BACK! cout = " + count++);
+		System.err.println(reader.readString());
+		System.err.println(reader.readString());
+		System.err.println(reader.readInt());
+
+		writer.WriteString("RPC CALL BACK! cout = " + count++);
 	}
 
 }
