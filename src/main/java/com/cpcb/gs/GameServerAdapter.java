@@ -4,12 +4,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 
+import com.cpcb.gs.RpcMessage.RpcRequest.RequestHeader;
+import com.cpcb.gs.RpcMessage.RpcResponse;
+import com.cpcb.gs.RpcMessage.RpcResponse.ResponseHeader;
 import com.cpcb.gs.io.ProtocolDeploy;
 import com.cpcb.gs.io.RpcReader;
 import com.cpcb.gs.io.RpcWriter;
 import com.cpcb.gs.rpc.RpcHandlerMapping;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Method;
 
@@ -22,7 +28,7 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws InvalidProtocolBufferException {
 		InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
-		System.out.println(socketAddress.getAddress().getHostAddress() + ":" + socketAddress.getPort());
+		// System.out.println(socketAddress.getAddress().getHostAddress() + ":" + socketAddress.getPort());
 
 		ByteBuf buf = (ByteBuf) msg;
 		buf.readInt();
@@ -44,13 +50,16 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 
 			Class<?>[] parameterTypes = rpcHandler.method.getParameterTypes();
 			Object[] args = new Object[parameterTypes.length];
+
 			int index = 0;
+			RpcReader rpcReader = new RpcReader(request.getContent().toByteArray());
+			RpcWriter rpcWriter = new RpcWriter();
+
 			for (Class<?> pType : parameterTypes) {
-				System.out.println(pType);
 				if (pType.equals(RpcReader.class)) {
-					args[index] = new RpcReader(request.getContent().toByteArray());
+					args[index] = rpcReader;
 				} else if (pType.equals(RpcWriter.class)) {
-					args[index] = new RpcWriter(buf);
+					args[index] = rpcWriter;
 				} else {
 					args[index] = null;
 				}
@@ -58,6 +67,16 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 				index++;
 			}
 			rpcHandler.method.invoke(ServerContext.ctx.getBean(rpcHandler.clazz), args);
+
+			// Write Back
+//			ResponseHeader header = RpcMessage.RpcResponse.ResponseHeader.newBuilder()
+//					.setReqId(request.getHeader().getReqId()).build();
+//			RpcResponse response = RpcMessage.RpcResponse.newBuilder().setHeader(header)
+//					.setContent(ByteString.copyFrom(rpcWriter.getBytes())).build();
+
+			//byte[] backBytes = response.toByteArray();
+			//buf.writeInt(backBytes.length);
+			//buf.writeBytes(backBytes);
 
 		} catch (BeansException e) {
 			e.printStackTrace();

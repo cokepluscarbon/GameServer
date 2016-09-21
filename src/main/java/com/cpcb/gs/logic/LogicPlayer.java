@@ -10,12 +10,15 @@ import com.cpcb.gs.io.RpcWriter;
 @Logic
 @Component
 public class LogicPlayer {
+	public static int count = 0;
 
 	@Rpc("rpc_get_player")
 	public void getPlayer(RpcWriter writer, RpcReader reader) {
 		System.err.println(String.format("call rpc_get_player [writer=%s,reader=%s]", writer, reader));
 
-		System.err.println(new String(reader.readString()));
+		//System.err.println(new String(reader.readString()));
+		
+		//writer.WriteString("RPC CALL BACK! cout = " + count++);
 	}
 
 }
