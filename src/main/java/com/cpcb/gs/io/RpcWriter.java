@@ -1,6 +1,15 @@
 package com.cpcb.gs.io;
 
+import java.io.DataOutputStream;
+
+import io.netty.buffer.ByteBuf;
+
 public class RpcWriter {
+	private DataOutputStream out;
+
+	public RpcWriter(ByteBuf buf) {
+		out = new DataOutputStream(buf.);
+	}
 
 	public void WriteByte(byte value) {
 
@@ -21,7 +30,7 @@ public class RpcWriter {
 	public void WriteDouble(double value) {
 
 	}
-	
+
 	public void WriteBool(boolean value) {
 
 	}
@@ -31,6 +40,10 @@ public class RpcWriter {
 	}
 
 	public void WriteObject(Object object) {
+
+	}
+
+	public byte[] getBytes() {
 
 	}
 

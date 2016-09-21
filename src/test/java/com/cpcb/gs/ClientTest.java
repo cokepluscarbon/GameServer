@@ -20,7 +20,7 @@ public class ClientTest {
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
 		long start = System.currentTimeMillis();
-		for (int i = 0; i < 102400; i++) {
+		for (int i = 0; i < 10; i++) {
 			RequestHeader header = RequestHeader.newBuilder().setRpcId(1).setReqId(new Random().nextInt()).build();
 			RpcMessage.RpcRequest request = RpcMessage.RpcRequest.newBuilder().setHeader(header)
 					.setContent(ByteString.copyFrom(("Hello GameServer!" + i).getBytes())).build();

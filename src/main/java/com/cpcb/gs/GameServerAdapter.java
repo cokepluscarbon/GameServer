@@ -7,6 +7,8 @@ import java.util.Random;
 import org.springframework.beans.BeansException;
 
 import com.cpcb.gs.io.ProtocolDeploy;
+import com.cpcb.gs.io.RpcReader;
+import com.cpcb.gs.io.RpcWriter;
 import com.cpcb.gs.rpc.RpcHandlerMapping;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Method;
@@ -28,21 +30,35 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 		byte[] data = new byte[buf.readableBytes()];
 		buf.readBytes(data);
 
-		// System.out.println(new String(data) + " : " + System.nanoTime());
-
 		RpcMessage.RpcRequest request = RpcMessage.RpcRequest.parseFrom(data);
 
-		System.out.println("rpc_id -> " + request.getHeader().getRpcId());
-		System.out.println("req_id -> " + request.getHeader().getReqId());
-		System.out.println("content -> " + new String(request.getContent().toByteArray()));
+		invokeRpcMethod(buf, request);
+	}
 
+	private void invokeRpcMethod(ByteBuf buf, RpcMessage.RpcRequest request) {
 		int rpcId = request.getHeader().getRpcId();
 		ProtocolDeploy deploy = ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class);
 
 		RpcHandlerMapping rpcHandler = ServerContext.rpcHandlerMap.get(deploy.rpc);
 		try {
-			Object[] args = new Object[] { buf, new Random().nextInt() };
+
+			Class<?>[] parameterTypes = rpcHandler.method.getParameterTypes();
+			Object[] args = new Object[parameterTypes.length];
+			int index = 0;
+			for (Class<?> pType : parameterTypes) {
+				System.out.println(pType);
+				if (pType.equals(RpcReader.class)) {
+					args[index] = new RpcReader(request.getContent().toByteArray());
+				} else if (pType.equals(RpcWriter.class)) {
+					args[index] = new RpcWriter(buf);
+				} else {
+					args[index] = null;
+				}
+
+				index++;
+			}
 			rpcHandler.method.invoke(ServerContext.ctx.getBean(rpcHandler.clazz), args);
+
 		} catch (BeansException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -59,5 +75,4 @@ public class GameServerAdapter extends ChannelInboundHandlerAdapter {
 		cause.printStackTrace();
 		ctx.close();
 	}
-
 }
