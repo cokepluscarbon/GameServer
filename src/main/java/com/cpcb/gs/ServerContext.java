@@ -16,7 +16,6 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 import com.cpcb.gs.annotation.Logic;
 import com.cpcb.gs.annotation.Rpc;
-import com.cpcb.gs.logic.LogicPlayer;
 import com.cpcb.gs.rpc.RpcHandlerMapping;
 
 public class ServerContext {
