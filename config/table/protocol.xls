@@ -5,7 +5,7 @@ id	rpc	encrypt	tests	tests2	tests3	jsonObject	object	testDouble	testFloat	testBy
 2	rpc_get_hero	1	[4,5,6]	["test"]	[true,true]	{"id":2}	{"id":1}	2	3	1	5	B
 3	rpc_get_gun	1	[1,2,4]	["tiger","tiger3"]	[false]	{"id":3}	{"name":"tiger"}	3	4	1	6	C
 4	rpc_user_login	1	[4,5,7]	["test"]	[true,true]	{"id":4}	{"id":2}	4	5	1	7	D
-5	rpc_user_login	1	[1,2,5]	["tiger","tiger4"]	[false]	{"id":5}	{"name":"tiger"}	5	6	1	8	A
+5	rpc_get_unity	1	[1,2,5]	["tiger","tiger4"]	[false]	{"id":5}	{"name":"tiger"}	5	6	1	8	A
 6	rpc_user_login	1	[4,5,8]	["test"]	[true,true]	{"id":6}	{"id":3}	6	7	1	9	B
 7	rpc_user_login	1	[1,2,6]	["tiger","tiger5"]	[false]	{"id":7}	{"name":"tiger"}	7	8	1	10	C
 8	rpc_user_login	1	[4,5,9]	["test"]	[true,true]	{"id":8}	{"id":4}	8	9	1	11	D

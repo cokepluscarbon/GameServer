@@ -36,5 +36,11 @@ public class LogicPlayer {
 		logger.info("rpc_get_gun msg = " + msg);
 		return ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class);
 	}
+	
+	@Rpc("rpc_get_unity")
+	public ProtocolDeploy getUnity(int rpcId) {
+		logger.info("getGun rpc_get_unity");
+		return ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class);
+	}
 
 }
