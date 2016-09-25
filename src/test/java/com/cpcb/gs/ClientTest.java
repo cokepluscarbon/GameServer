@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class ClientTest {
 						RpcMessage.RpcResponse response = RpcMessage.RpcResponse.parseFrom(bytes);
 						byte[] content = response.getContent().toByteArray();
 
-						RpcReader reader = new RpcReader(content);
+						RpcReader reader = new RpcReader(content, StandardCharsets.UTF_8);
 						System.out.println(reader.readString());
 
 					}
@@ -49,37 +50,39 @@ public class ClientTest {
 		while (true) {
 			int rpcId = new Random().nextInt(4) + 1;
 
-			RpcWriter writer = new RpcWriter();
-			writer.WriteInt(rpcId);
-			writer.WriteString("Hello GameServer : " + count++);
+			RpcWriter writer = new RpcWriter(StandardCharsets.UTF_8);
+			writer.WriteInt(5);
+			writer.WriteString("I am Unity Client!");
 
-			RequestHeader header = RequestHeader.newBuilder().setRpcId(rpcId).setReqId(rpcId).build();
+			RequestHeader header = RequestHeader.newBuilder().setRpcId(5).setReqId(1).build();
 			RpcMessage.RpcRequest request = RpcMessage.RpcRequest.newBuilder().setHeader(header)
 					.setContent(ByteString.copyFrom(writer.getBytes())).build();
 
 			byte[] bytes = request.toByteArray();
-			out.writeInt(bytes.length);
+			out.writeShort(bytes.length);
 			out.write(bytes);
 			out.flush();
 			Thread.sleep(500);
 		}
 	}
 
+	@Test
 	public void Test_02() throws UnknownHostException, IOException {
 		Socket socket = new Socket("127.0.0.1", 8080);
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
 		long start = System.currentTimeMillis();
 		for (int i = 0; i < 3; i++) {
-			RpcWriter writer = new RpcWriter();
-			writer.WriteString("Hello GameServer : " + i);
+			RpcWriter writer = new RpcWriter(StandardCharsets.UTF_8);
+			writer.WriteString("I am Unity Client!");
 
-			RequestHeader header = RequestHeader.newBuilder().setRpcId(1).setReqId(new Random().nextInt()).build();
+			RequestHeader header = RequestHeader.newBuilder().setRpcId(5).setReqId(1).build();
 			RpcMessage.RpcRequest request = RpcMessage.RpcRequest.newBuilder().setHeader(header)
 					.setContent(ByteString.copyFrom(writer.getBytes())).build();
 
 			byte[] bytes = request.toByteArray();
-			out.writeInt(bytes.length);
+			System.out.println("len => " + bytes.length);
+			out.writeShort(bytes.length);
 			out.write(bytes);
 			out.flush();
 		}

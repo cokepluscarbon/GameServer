@@ -3,6 +3,8 @@ package com.cpcb.gs.io;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +14,10 @@ import com.alibaba.fastjson.JSON;
 public class RpcReader {
 	private final Logger logger = LoggerFactory.getLogger(RpcReader.class);
 	private DataInputStream input;
+	private Charset charset;
 
-	public RpcReader(byte[] bytes) {
+	public RpcReader(byte[] bytes, Charset charset) {
+		this.charset = charset;
 		input = new DataInputStream(new ByteArrayInputStream(bytes));
 	}
 
@@ -58,7 +62,7 @@ public class RpcReader {
 		byte[] bytes = new byte[len];
 		try {
 			input.read(bytes);
-			return new String(bytes);
+			return new String(bytes, charset);
 		} catch (IOException e) {
 			logger.error("RpcReader reach the end of bytes.");
 		}

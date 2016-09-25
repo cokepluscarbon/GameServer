@@ -1,6 +1,7 @@
 package com.cpcb.gs.adapter;
 
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 
 import com.cpcb.gs.RpcMessage;
 import com.cpcb.gs.RpcMessage.RpcResponse;
@@ -42,8 +43,8 @@ public class DispatchLogicAdapter extends ChannelInboundHandlerAdapter {
 
 	private RpcWriter dynamicInvokeRpcMethod(RpcHandlerMapping rpcHandler, byte[] content)
 			throws IllegalAccessException, InvocationTargetException {
-		RpcReader rpcReader = new RpcReader(content);
-		RpcWriter rpcWriter = new RpcWriter();
+		RpcReader rpcReader = new RpcReader(content, StandardCharsets.UTF_8);
+		RpcWriter rpcWriter = new RpcWriter(StandardCharsets.UTF_8);
 
 		Object[] args = handleParameters(rpcHandler, rpcReader, rpcWriter);
 		Object returnObj = rpcHandler.method.invoke(ServerContext.ctx.getBean(rpcHandler.clazz), args);
@@ -96,7 +97,7 @@ public class DispatchLogicAdapter extends ChannelInboundHandlerAdapter {
 		byte[] backBytes = response.toByteArray();
 
 		ByteBuf backBuf = ctx.alloc().buffer(backBytes.length);
-		backBuf.writeInt(backBytes.length);
+		backBuf.writeShort(backBytes.length);
 		backBuf.writeBytes(backBytes);
 		ctx.writeAndFlush(backBuf);
 	}

@@ -14,7 +14,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-@SuppressWarnings("unused")
 public class GameServer {
 	private final Logger logger = LoggerFactory.getLogger(GameServer.class);
 

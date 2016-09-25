@@ -3,6 +3,7 @@ package com.cpcb.gs.io;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +14,10 @@ public class RpcWriter {
 	private Logger logger = LoggerFactory.getLogger(RpcWriter.class);
 	private ByteArrayOutputStream byteArray;
 	private DataOutputStream out;
+	private Charset charset;
 
-	public RpcWriter() {
+	public RpcWriter(Charset charset) {
+		this.charset = charset;
 		byteArray = new ByteArrayOutputStream();
 		out = new DataOutputStream(byteArray);
 	}
@@ -69,7 +72,7 @@ public class RpcWriter {
 
 	public void WriteString(String str) {
 		try {
-			byte[] bytes = str.getBytes();
+			byte[] bytes = str.getBytes(charset);
 			out.writeInt(bytes.length);
 			out.write(bytes);
 		} catch (IOException e) {
@@ -79,7 +82,7 @@ public class RpcWriter {
 
 	public void WriteObject(Object object) {
 		try {
-			byte[] bytes = JSON.toJSONString(object).getBytes();
+			byte[] bytes = JSON.toJSONString(object).getBytes(charset);
 			out.writeInt(bytes.length);
 			out.write(bytes);
 		} catch (IOException e) {
