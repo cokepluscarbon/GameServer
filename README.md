@@ -36,6 +36,7 @@ public class LogicPlayer {
 
 3、支持动态解析RPC包的参数，例如下面的rpc_get_player中的msgId和message，框架会自动解析RPC包中的参数并赋值给变量；
 
+```Java
 @Logic
 @Component
 public class LogicPlayer {
@@ -49,6 +50,8 @@ public class LogicPlayer {
 ```
 
 4、可以返回任意类型，框架会自动序列化对象并写入到RPC的输出流中；
+
+5、多功能的配置表解析机制，支持任意类型数据解析: TableLoader；
 
 
 
