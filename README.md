@@ -16,7 +16,7 @@ public class LogicPlayer {
 }
 ```
 
-2、使用@Rpc注释Rpc调用的路径，跟Spring MVC的@RequestMapping类型；
+2、使用@Rpc注释Rpc调用的路径，跟Spring MVC的@RequestMapping类似；
 
 ```Java
 @Logic
