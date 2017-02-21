@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +68,11 @@ public class RpcReader {
 		}
 
 		return null;
+	}
+	
+	public Date readDate() {
+		long time = readLong();
+		return new Date(time);
 	}
 
 	public <T> T readObject(Class<T> clazz) {

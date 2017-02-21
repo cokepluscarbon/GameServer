@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.Random;
 
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class ClientTest {
 
 					}
 				} catch (Exception e) {
-
+					e.printStackTrace();
 				}
 			}
 		}).start();
@@ -51,10 +52,8 @@ public class ClientTest {
 			int rpcId = new Random().nextInt(4) + 1;
 
 			RpcWriter writer = new RpcWriter(StandardCharsets.UTF_8);
-			writer.WriteInt(5);
-			writer.WriteString("I am Unity Client!");
-
-			RequestHeader header = RequestHeader.newBuilder().setRpcId(5).setReqId(1).build();
+			writer.writeDate(new Date());
+			RequestHeader header = RequestHeader.newBuilder().setRpcId(1000).setReqId(1).build();
 			RpcMessage.RpcRequest request = RpcMessage.RpcRequest.newBuilder().setHeader(header)
 					.setContent(ByteString.copyFrom(writer.getBytes())).build();
 
@@ -67,12 +66,12 @@ public class ClientTest {
 	}
 
 	@Test
-	public void Test_02() throws UnknownHostException, IOException {
+	public void Test_02() throws UnknownHostException, IOException, InterruptedException {
 		Socket socket = new Socket("127.0.0.1", 8080);
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
 		long start = System.currentTimeMillis();
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 30; i++) {
 			RpcWriter writer = new RpcWriter(StandardCharsets.UTF_8);
 			writer.WriteString("I am Unity Client!");
 
@@ -85,6 +84,40 @@ public class ClientTest {
 			out.writeShort(bytes.length);
 			out.write(bytes);
 			out.flush();
+
+			Thread.currentThread().sleep(1000);
+		}
+		long end = System.currentTimeMillis();
+		System.out.println("Time last " + (end - start));
+		System.out.println("Per requset spend " + (end - start) * 1f / 3);
+
+		out.close();
+
+		socket.close();
+
+	}
+
+	@Test
+	public void Test_heartBeat_03() throws UnknownHostException, IOException, InterruptedException {
+		Socket socket = new Socket("127.0.0.1", 8080);
+		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+
+		long start = System.currentTimeMillis();
+		for (int i = 0; i < Integer.MAX_VALUE; i++) {
+			RpcWriter writer = new RpcWriter(StandardCharsets.UTF_8);
+			writer.writeDate(new Date());
+
+			RequestHeader header = RequestHeader.newBuilder().setRpcId(1000).setReqId(1).build();
+			RpcMessage.RpcRequest request = RpcMessage.RpcRequest.newBuilder().setHeader(header)
+					.setContent(ByteString.copyFrom(writer.getBytes())).build();
+
+			byte[] bytes = request.toByteArray();
+			System.out.println("len => " + bytes.length);
+			out.writeShort(bytes.length);
+			out.write(bytes);
+			out.flush();
+
+			Thread.currentThread().sleep(10);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println("Time last " + (end - start));

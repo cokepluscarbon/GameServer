@@ -21,7 +21,7 @@ public class LogicGun {
 		logger.info("userLogin method");
 		int rpcId = reader.readInt();
 
-		writer.WriteObject(ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class));
+		writer.writeObject(ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class));
 	}
 
 }

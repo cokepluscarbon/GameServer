@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class RpcWriter {
 		out = new DataOutputStream(byteArray);
 	}
 
-	public void WriteByte(byte value) {
+	public void writeByte(byte value) {
 		try {
 			out.writeByte(value);
 		} catch (IOException e) {
@@ -30,7 +31,7 @@ public class RpcWriter {
 		}
 	}
 
-	public void WriteInt(int value) {
+	public void writeInt(int value) {
 		try {
 			out.writeInt(value);
 		} catch (IOException e) {
@@ -38,7 +39,7 @@ public class RpcWriter {
 		}
 	}
 
-	public void WriteLong(long value) {
+	public void writeLong(long value) {
 		try {
 			out.writeLong(value);
 		} catch (IOException e) {
@@ -46,7 +47,7 @@ public class RpcWriter {
 		}
 	}
 
-	public void WriteFloat(float value) {
+	public void writeFloat(float value) {
 		try {
 			out.writeFloat(value);
 		} catch (IOException e) {
@@ -54,7 +55,7 @@ public class RpcWriter {
 		}
 	}
 
-	public void WriteDouble(double value) {
+	public void writeDouble(double value) {
 		try {
 			out.writeDouble(value);
 		} catch (IOException e) {
@@ -62,7 +63,7 @@ public class RpcWriter {
 		}
 	}
 
-	public void WriteBool(boolean value) {
+	public void writeBool(boolean value) {
 		try {
 			out.writeBoolean(value);
 		} catch (IOException e) {
@@ -80,7 +81,16 @@ public class RpcWriter {
 		}
 	}
 
-	public void WriteObject(Object object) {
+	public void writeDate(Date date) {
+		try {
+			long time = date.getTime();
+			out.writeLong(time);
+		} catch (IOException e) {
+			logger.error("RpcWrite write date error : " + e.getMessage());
+		}
+	}
+
+	public void writeObject(Object object) {
 		try {
 			byte[] bytes = JSON.toJSONString(object).getBytes(charset);
 			out.writeInt(bytes.length);

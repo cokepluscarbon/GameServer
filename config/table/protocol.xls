@@ -501,3 +501,4 @@ id	rpc	encrypt	tests	tests2	tests3	jsonObject	object	testDouble	testFloat	testBy
 498	rpc_user_login	1	[4,5,254]	["test"]	[true,true]	{"id":498}	{"id":249}	498	499	1	501	B
 499	rpc_user_login	1	[1,2,252]	["tiger","tiger251"]	[false]	{"id":499}	{"name":"tiger"}	499	500	1	502	C
 500	rpc_user_login	1	[4,5,255]	["test"]	[true,true]	{"id":500}	{"id":250}	500	501	1	503	D
+1000	rpc_heart_beat	1	[4,5,255]	["test"]	[true,true]	{"id":500}	{"id":250}	500	501	1	503	D

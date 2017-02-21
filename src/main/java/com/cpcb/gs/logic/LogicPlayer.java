@@ -1,5 +1,7 @@
 package com.cpcb.gs.logic;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -21,13 +23,13 @@ public class LogicPlayer {
 		logger.info("getPlayer method");
 		int rpcId = reader.readInt();
 
-		writer.WriteObject(ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class));
+		writer.writeObject(ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class));
 	}
 
 	@Rpc("rpc_get_hero")
 	public void getHero(int rpcId, RpcWriter writer) {
 		logger.info("getHero method");
-		writer.WriteObject(ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class));
+		writer.writeObject(ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class));
 	}
 
 	@Rpc("rpc_get_gun")
@@ -36,12 +38,18 @@ public class LogicPlayer {
 		logger.info("rpc_get_gun msg = " + msg);
 		return ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class);
 	}
-	
+
 	@Rpc("rpc_get_unity")
 	public ProtocolDeploy getUnity(int rpcId) {
 		System.out.println("rpcId = " + rpcId);
 		logger.info("getGun rpc_get_unity");
 		return ProtocolDeploy.getDeploy(rpcId, ProtocolDeploy.class);
+	}
+
+	@Rpc("rpc_heart_beat")
+	public String heartBeat(Date currTime) {
+		logger.info("receive heart beat at " + currTime);
+		return "Server receive heart beat at " + currTime + "!";
 	}
 
 }

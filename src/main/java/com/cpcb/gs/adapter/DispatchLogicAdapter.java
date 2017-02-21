@@ -2,6 +2,7 @@ package com.cpcb.gs.adapter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 import com.cpcb.gs.RpcMessage;
 import com.cpcb.gs.RpcMessage.RpcResponse;
@@ -57,11 +58,11 @@ public class DispatchLogicAdapter extends ChannelInboundHandlerAdapter {
 	private void hanldeReturn(RpcHandlerMapping rpcHandler, RpcWriter rpcWriter, Object returnObj) {
 		Class<?> returnType = rpcHandler.method.getReturnType();
 		if (returnType.equals(int.class)) {
-			rpcWriter.WriteInt((Integer) returnObj);
+			rpcWriter.writeInt((Integer) returnObj);
 		} else if (returnType.equals(void.class)) {
 
 		} else {
-			rpcWriter.WriteObject(returnObj);
+			rpcWriter.writeObject(returnObj);
 		}
 	}
 
@@ -75,6 +76,8 @@ public class DispatchLogicAdapter extends ChannelInboundHandlerAdapter {
 				args[index] = rpcReader.readInt();
 			} else if (pType.equals(String.class)) {
 				args[index] = rpcReader.readString();
+			} else if (pType.equals(Date.class)) {
+				args[index] = rpcReader.readDate();
 			} else if (pType.equals(RpcReader.class)) {
 				args[index] = rpcReader;
 			} else if (pType.equals(RpcWriter.class)) {
